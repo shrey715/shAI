@@ -5,6 +5,7 @@ shAI is a command line tool that allows you to use natural language to execute b
 ## Features
 
 - 🧠 Natural language to bash command translation
+- 🔍 Query validation to ensure appropriate use
 - 🔒 Command safety validation before execution
 - 📋 Detailed execution results and error reporting
 - 🌐 Runs locally using Ollama models
@@ -47,6 +48,7 @@ shai "check memory and cpu usage"
 
 ### Project Structure
 
+- `src/agents/cmd_validator.py`: Validates if queries are appropriate for command generation
 - `src/agents/cmd_safety.py`: Validates commands for safety
 - `src/agents/cmd_executor.py`: Executes validated commands
 - `src/main.py`: Entry point for the CLI
