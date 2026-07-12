@@ -5,17 +5,18 @@ setup(
     version='0.1.0',
     author='Shreyas Deb',
     packages=find_packages(where='src'),
+    py_modules=['main', 'config', 'history'],
     package_dir={'': 'src'},
     install_requires=[
         'click',
         'requests',
         'ollama',
         'rich',
-        'pyyaml',
+        'python-dotenv',
     ],
     entry_points={
         'console_scripts': [
-            'shai=main:main',
+            'shai=main:cli',
         ],
     },
     description='A smarter bash using LLM-powered NLP',

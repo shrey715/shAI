@@ -2,9 +2,13 @@
 This agent takes a list of commands to execute and executes them in order.
 Upon successful execution, it returns a success statement else it returns a failure statement.
 """
-import sys
 import subprocess
 from typing import Dict, List, Union
+
+from rich.console import Console
+
+console = Console()
+err_console = Console(stderr=True)
 
 def execute_commands(commands: List[str], verbose: bool = False) -> Dict[str, Union[bool, List[Dict[str, Union[str, int]]]]]:
     """
@@ -18,42 +22,42 @@ def execute_commands(commands: List[str], verbose: bool = False) -> Dict[str, Un
         dict: A dictionary containing success status and detailed results for each command
     """
     if verbose:
-        print(f"Executing commands: {commands}")
-    
+        console.print(f"[dim]Executing commands: {commands}[/dim]")
+
     results = []
     success = True
-    
+
     try:
         for command in commands:
             if verbose:
-                print(f"Executing command: {command}")
-            
+                console.print(f"[dim]Executing command: {command}[/dim]")
+
             process = subprocess.run(
                 command,
                 shell=True,
                 text=True,
                 capture_output=True
             )
-            
+
             cmd_result = {
                 "command": command,
                 "exit_code": process.returncode,
                 "stdout": process.stdout,
                 "stderr": process.stderr
             }
-            
+
             results.append(cmd_result)
-            
+
             if process.returncode != 0:
                 if verbose:
-                    print(f"Command failed with exit code {process.returncode}")
-                    print(f"Error: {process.stderr}")
+                    console.print(f"[dim]Command failed with exit code {process.returncode}[/dim]")
+                    console.print(f"[dim]Error: {process.stderr}[/dim]")
                 success = False
                 # Continue executing the remaining commands even if one fails
-    
+
     except Exception as e:
         if verbose:
-            print(f"Error executing command: {str(e)}", file=sys.stderr)
+            err_console.print(f"[red]Error executing command: {e}[/red]")
         success = False
         results.append({
             "command": command if 'command' in locals() else "unknown",
